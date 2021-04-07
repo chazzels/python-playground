@@ -7,20 +7,20 @@ try:
 except OSError as e:
 	print("fail")
 
-print(clean(os.getlogin()))
+print(os.getlogin())
 print()
-print(clean( str(os.get_exec_path())))
-print()
-
-print(clean(str(sys.path)))
+print(str(os.get_exec_path()))
 print()
 
-print(clean(str(sys.byteorder)))
+print(str(sys.path))
 print()
 
-print(clean(os.listdir()))
+print(str(sys.byteorder))
+print()
+
+print(os.listdir())
 os.makedirs('tempPython')
-print(clean(os.listdir()))
+print(os.listdir())
 print()
 
 # popen to run a git command instead because linux
