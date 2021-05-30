@@ -5,10 +5,8 @@ import convertToKilometers
 class Convert:
 	def __init__(self):
 		()
-	def convertMiles(self, distance):
-		convertToMiles.kmToMiles(distance)
-	def convertKilometers(self, distance):
-		convertToKilometers.milesToKm(distance)
+	def convertMiles(self, distance):convertToMiles.kmToMiles(distance)
+	def convertKilometers(self, distance):convertToKilometers.milesToKm(distance)
 	def detectUnits(self, units):
 		units = str(units).lower()
 		if units == convertToKilometers.kilometerUnit:
@@ -36,14 +34,14 @@ class UserInterface:
 	def processAnswer(self, ans):
 		if len(ans) >= 2:
 			ans = ans.strip().replace(' ', '').lower()
-			x = re.search('m', ans)
-			if x == None:
+			numbers = re.search(r'[0-9]+\.[0-9]+', ans)
+			numbers = re.search(r'[0-9]+', ans)
+			print(numbers)
+			if numbers == None:
 				return None
 			else:
-				
-			print(x)
-			print(x.start(0))
-			print(x.end(0))
+				print(numbers.start(0))
+				print(numbers.end(0))
 		else:
 			print("input error")
 
