@@ -18,29 +18,38 @@ class UserInterface:
 	def __init__(self):
 		self.running = False
 		self.convert = Convert()
+		self.response = ''
 		self.start()
 	def start(self):
 		self.running = True
 		while self.running == True:
 			status = self.mainQuestion()
 			if status != None and status != 'exit':
-				print(status)
+				print()
+				print(self.response, ' = ', status)
+				print()
 			elif status == 'exit':
 				return
 			else:
+				print()
 				print("there was an issue with the input. please try again")
+				print()
 	def exit(self):
 		self.running = False
 	def mainQuestion(self):
-		print("Convert a distance from Miles to KM or KM to Miles (units auto-detected)")
+		print("Convert a distance from Miles to KM or KM to Miles")
+		print('[type exit to stop processing] (units auto-detected)')
 		inputDistance = str(input("Enter distance to convert: "))
+		self.response = inputDistance
 		if inputDistance.lower() == 'exit':
 			self.exit()
 			return 'exit'
 		else:
 			result = self.processAnswer(inputDistance)
 			if result == None:
+				print()
 				print('there was an issue with the input. please try again.')
+				print()
 				return None
 			else:
 				return self.convert.convert(result.get('distance'), result.get('unit'))
@@ -60,7 +69,9 @@ class UserInterface:
 				unit = ans[floatNum.end(0):len(ans)]
 			return {'distance': distance, 'unit': unit}
 		else:
+			print()
 			print("input error")
+			print()
 			return None
 
 
