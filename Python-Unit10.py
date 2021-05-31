@@ -3,18 +3,16 @@ import convertToMiles
 import convertToKilometers
 
 class Convert:
-	def __init__(self):
-		()
-	def convertMiles(self, distance):convertToMiles.kmToMiles(distance)
-	def convertKilometers(self, distance):convertToKilometers.milesToKm(distance)
-	def detectUnits(self, units):
-		units = str(units).lower()
-		if units == convertToKilometers.kilometerUnit:
-			print('km unit')
-		elif units == convertToMiles.milesUnit:
-			print('miles unit')
-		
-
+	def __init__(self):()
+	def convert(self, distance, unit):
+		if unit == convertToKilometers.kilometerUnit:
+			return self.convertMiles(distance)
+		elif unit == convertToMiles.milesUnit:
+			return self.convertKilometers(distance)
+		else:
+			return None
+	def convertMiles(self, distance):return str(round(convertToMiles.kmToMiles(distance),2))+' miles'
+	def convertKilometers(self, distance):return str(round(convertToKilometers.milesToKm(distance),2))+' kilometers'
 
 class UserInterface:
 	def __init__(self):
@@ -24,26 +22,46 @@ class UserInterface:
 	def start(self):
 		self.running = True
 		while self.running == True:
-			self.mainQuestion()
+			status = self.mainQuestion()
+			if status != None and status != 'exit':
+				print(status)
+			elif status == 'exit':
+				return
+			else:
+				print("there was an issue with the input. please try again")
 	def exit(self):
 		self.running = False
 	def mainQuestion(self):
-		print("Convert a distance from Miles to KM or KM to Miles")
-		inputDistance = str(input("Enter distance to convert (eg 2m or 2km) "))
-		result = self.processAnswer(inputDistance)
+		print("Convert a distance from Miles to KM or KM to Miles (units auto-detected)")
+		inputDistance = str(input("Enter distance to convert: "))
+		if inputDistance.lower() == 'exit':
+			self.exit()
+			return 'exit'
+		else:
+			result = self.processAnswer(inputDistance)
+			if result == None:
+				print('there was an issue with the input. please try again.')
+				return None
+			else:
+				return self.convert.convert(result.get('distance'), result.get('unit'))
 	def processAnswer(self, ans):
 		if len(ans) >= 2:
 			ans = ans.strip().replace(' ', '').lower()
-			numbers = re.search(r'[0-9]+\.[0-9]+', ans)
-			numbers = re.search(r'[0-9]+', ans)
-			print(numbers)
-			if numbers == None:
+			intNum = re.search(r'[0-9]+', ans)
+			floatNum = re.search(r'[0-9]+\.[0-9]+', ans)
+			if intNum == None and floatNum == None:
+				print('input error')
 				return None
-			else:
-				print(numbers.start(0))
-				print(numbers.end(0))
+			elif floatNum == None and intNum != None:
+				distance = int(ans[intNum.start(0):intNum.end(0)])
+				unit = ans[intNum.end(0):len(ans)]
+			elif floatNum != None and intNum != None:
+				distance = float(ans[floatNum.start(0):floatNum.end(0)])
+				unit = ans[floatNum.end(0):len(ans)]
+			return {'distance': distance, 'unit': unit}
 		else:
 			print("input error")
+			return None
 
 
 program = UserInterface()
